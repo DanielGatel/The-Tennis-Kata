@@ -11,10 +11,10 @@ public class ScoreImpl implements Score {
 
     @Getter
     @Setter
-    private Point server;
+    private Point receiver;
     @Getter
     @Setter
-    private Point receiver;
+    private Point server;
 
     public ScoreImpl() {
         server = Point.P_LOVE;
@@ -22,8 +22,8 @@ public class ScoreImpl implements Score {
     }
 
     public ScoreImpl(Point server, Point receiver) {
-this.server = server;
-this.receiver = receiver;
+        this.server = server;
+        this.receiver = receiver;
     }
 
     public ScoreImpl(Score score) {

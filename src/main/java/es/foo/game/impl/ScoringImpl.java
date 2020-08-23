@@ -4,67 +4,59 @@ import es.foo.game.PlayerRole;
 import es.foo.game.Point;
 import es.foo.game.Score;
 import es.foo.game.Scoring;
-import io.cucumber.messages.internal.com.google.common.collect.Sets;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ScoringImpl implements Scoring {
 
-    protected static final Set<Point> NOT_IN_DEUCE = Sets.immutableEnumSet(Point.P_LOVE, Point.P_15, Point.P_30);
+    protected State state;
 
-    protected Score score;
+    @Getter
+    @Setter
+    protected Collection<Consumer<State>> rules;
+
+    protected static final Collection<Consumer<State>> RULES_DEFAULT = Set.of( Rules.deuce, Rules.score);
 
     public ScoringImpl(Score score) {
-        this.score = score;
+        state = new State();
+        state.setScoreOld(score);
+        rules = RULES_DEFAULT;
     }
 
     @Override
     public void update(final PlayerRole pointWinner) {
 
-        if(isDeuce(score)){
-            resolveDeuce(pointWinner);
-        } else {
-            switch (score.getPoint(pointWinner)){
+        startStep(pointWinner);
 
-                case P_LOVE:
-                    score.setPoint(pointWinner, Point.P_15);
-                    break;
-                case P_15:
-                    score.setPoint(pointWinner, Point.P_30);
-                    break;
-                case P_30:
-                    score.setPoint(pointWinner, Point.P_40);
-                    break;
-                case P_40:
-                    score.setPoint(pointWinner, Point.WIN);
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + score.getPoint(pointWinner));
-            }
-        }
+        rules.forEach(rule -> rule.accept(state));
 
+        endStep();
 
     }
 
-    private void resolveDeuce(final PlayerRole pointWinner) {
-        if(Point.ADVANTAGE.equals(score.getPoint(pointWinner))){
-            score.setPoint(pointWinner, Point.WIN);
-        } else if (Point.P_40.equals(score.getPoint(PlayerRole.SERVER)) && Point.P_40.equals(score.getPoint(PlayerRole.RECEIVER))) {
-            score.setPoint(pointWinner, Point.ADVANTAGE);
-        } else {
-            score.setPoint(PlayerRole.SERVER, Point.P_40);
-            score.setPoint(PlayerRole.RECEIVER, Point.P_40);
-        }
+    private void startStep(final PlayerRole pointWinner) {
+        state.setWinner(pointWinner);
+    }
+
+    private void endStep() {
+        state.setScoreOld(state.getScoreNew());
+        state.setScoreNew(null);
+        state.setWinner(null);
     }
 
     @Override
     public Score getScore() {
-        return score;
+        return state.getScoreOld();
     }
 
     @Override
     public Optional<PlayerRole> getGameWinner() {
+        final Score score = state.getScoreOld();
         if(Point.WIN.equals(score.getPoint(PlayerRole.SERVER))){
             return Optional.of(PlayerRole.SERVER);
         } else if(Point.WIN.equals(score.getPoint(PlayerRole.RECEIVER))){
@@ -73,11 +65,7 @@ public class ScoringImpl implements Scoring {
         return Optional.empty();
     }
 
-    public boolean isDeuce(Score score) {
 
-        return !(NOT_IN_DEUCE.contains(score.getPoint(PlayerRole.SERVER)) || NOT_IN_DEUCE.contains(score.getPoint(PlayerRole.RECEIVER)));
-
-    }
 
 
 }

@@ -4,23 +4,33 @@ import es.foo.game.PlayerRole;
 import es.foo.game.Point;
 import es.foo.game.Score;
 import es.foo.game.Scoring;
+import es.foo.game.impl.Rules;
 import es.foo.game.impl.ScoreImpl;
 import es.foo.game.impl.ScoringImpl;
+import io.cucumber.java.en.But;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ScoringStepdefs {
 
-    protected Scoring scoring;
+    protected ScoringImpl scoring;
 
 
     protected static final Pattern SCORE_PATTERN = Pattern.compile("(?<p1>0|15|30|40|A):(?<p2>0|15|30|40|A)");
+
+    @But("remove the rule of winning by two")
+    public void removeTheRuleOfWinningBy() {
+
+        scoring.setRules(Set.of(Rules.score));
+
+    }
 
 
     @Given("the score is {string}")
