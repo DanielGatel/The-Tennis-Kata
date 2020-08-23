@@ -1,8 +1,8 @@
-package es.foo.game.impl;
+package es.foo.shared.impl;
 
-import es.foo.game.PlayerRole;
-import es.foo.game.Point;
-import es.foo.game.Score;
+import es.foo.shared.model.PlayerRole;
+import es.foo.shared.model.Point;
+import es.foo.shared.model.Score;
 import io.cucumber.messages.internal.com.google.common.collect.Sets;
 
 import java.util.Set;

@@ -1,7 +1,7 @@
-package es.foo.game.impl;
+package es.foo.shared.impl;
 
-import es.foo.game.PlayerRole;
-import es.foo.game.Score;
+import es.foo.shared.model.PlayerRole;
+import es.foo.shared.model.Score;
 import lombok.Data;
 
 @Data

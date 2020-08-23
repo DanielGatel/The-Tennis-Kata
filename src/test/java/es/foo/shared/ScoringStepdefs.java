@@ -1,12 +1,11 @@
-package es.foo.game.stepdefs;
+package es.foo.shared;
 
-import es.foo.game.PlayerRole;
-import es.foo.game.Point;
-import es.foo.game.Score;
-import es.foo.game.Scoring;
-import es.foo.game.impl.Rules;
-import es.foo.game.impl.ScoreImpl;
-import es.foo.game.impl.ScoringImpl;
+import es.foo.shared.model.PlayerRole;
+import es.foo.shared.model.Point;
+import es.foo.shared.model.Score;
+import es.foo.shared.impl.Rules;
+import es.foo.shared.impl.ScoreImpl;
+import es.foo.shared.impl.ScoringImpl;
 import io.cucumber.java.en.But;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -28,7 +27,7 @@ public class ScoringStepdefs {
     @But("remove the rule of winning by two")
     public void removeTheRuleOfWinningBy() {
 
-        scoring.setRules(Set.of(Rules.score));
+        scoring.setRules(Set.of(Rules.SCORE));
 
     }
 

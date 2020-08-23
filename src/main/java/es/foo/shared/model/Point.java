@@ -1,4 +1,4 @@
-package es.foo.game;
+package es.foo.shared.model;
 
 import org.apache.commons.lang3.StringUtils;
 
