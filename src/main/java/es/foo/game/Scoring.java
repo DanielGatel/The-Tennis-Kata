@@ -1,4 +1,4 @@
-package es.foo;
+package es.foo.game;
 
 import java.util.Optional;
 

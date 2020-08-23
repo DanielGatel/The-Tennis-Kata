@@ -1,11 +1,14 @@
-package es.foo.stepdefs;
+package es.foo.game.stepdefs;
 
-import es.foo.*;
-import es.foo.impl.ScoringImpl;
+import es.foo.game.PlayerRole;
+import es.foo.game.Point;
+import es.foo.game.Score;
+import es.foo.game.Scoring;
+import es.foo.game.impl.ScoreImpl;
+import es.foo.game.impl.ScoringImpl;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 
 import java.util.Optional;
@@ -14,26 +17,26 @@ import java.util.regex.Pattern;
 
 public class ScoringStepdefs {
 
-    protected Scoring scoring = new ScoringImpl();
+    protected Scoring scoring;
 
 
     protected static final Pattern SCORE_PATTERN = Pattern.compile("(?<p1>0|15|30|40|A):(?<p2>0|15|30|40|A)");
-
-    Pair<Point,Point> score;
 
 
     @Given("the score is {string}")
     public void theScoreIs(String score) {
         final Matcher matcher = SCORE_PATTERN.matcher(score);
         Assert.assertTrue("Score format error", matcher.matches());
-        this.score = Pair.of(Point.forValue(matcher.group("p1")), Point.forValue(matcher.group("p2")));
+        scoring = new ScoringImpl(new ScoreImpl(Point.forValue(matcher.group("p1")), Point.forValue(matcher.group("p2"))));
     }
 
     @Then("the score should be {string}")
     public void theScoreShouldBe(String score) {
 
         final Score scoreActual = scoring.getScore();
-        Assert.assertEquals(score, scoreActual.getPoints());
+        String scoreString = String.join(":", scoreActual.getPoint(PlayerRole.SERVER).getValue(),
+                                         scoreActual.getPoint(PlayerRole.RECEIVER).getValue());
+        Assert.assertEquals(score, scoreString);
 
     }
 

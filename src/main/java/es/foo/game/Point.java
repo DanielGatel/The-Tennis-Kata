@@ -1,4 +1,4 @@
-package es.foo;
+package es.foo.game;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -6,7 +6,8 @@ import java.util.Arrays;
 
 public enum Point {
 
-    P_LOVE("0"), P_15("15"), P_30("30"), P_40("40"), ADVANTAGE("A");
+    P_LOVE("0"), P_15("15"), P_30("30"), P_40("40"), ADVANTAGE("A"), WIN("GAME");
+
 
 
     String value;
